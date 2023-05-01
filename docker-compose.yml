@@ -1,0 +1,19 @@
+version: '3'
+services:
+  your_application:
+    build: ./your_application
+    ports:
+      - "5001-5003:5000"
+    deploy:
+      replicas: 2 # you can any number here, watch out for memory
+      resources:  # if you need to access your GPU from the containers
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+  nginx:
+    build: ./nginx
+    ports:
+      - "5000:80"
+    depends_on:
+      - your_application
